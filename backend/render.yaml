@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: guvi-ecommerce-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://<your-cloud-db>:3306/ecommerce
+      - key: SPRING_DATASOURCE_USERNAME
+        value: your-username
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: your-password
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dc37qrn1x
+      - key: CLOUDINARY_API_KEY
+        value: 744715896446554
+      - key: CLOUDINARY_API_SECRET
+        value: gtu2rb5pVJ0M0vEmyrNKVwFpHco
+      - key: SECRETEJWTSTRING
+        value: Z9XrV5qB7wTnP2cY8jKmA4LgD1sUwXeN0vHqEiTfR3
+      - key: RAZORPAY_KEY
+        value: rzp_test_lDXdqUDot997h9
+      - key: RAZORPAY_SECRET
+        value: 5Q1xNKfbvhUq1cLabjNZVvRi
