@@ -1,17 +1,24 @@
-# Use lightweight OpenJDK image
-FROM openjdk:17-jdk-slim
+# === Stage 1: Build the JAR ===
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Set port (same as in application.properties)
-ENV PORT=2424
-
-# Create app directory
 WORKDIR /app
 
-# Copy your JAR file into the container
-COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
+# Copy everything (source, pom.xml, etc.)
+COPY . .
 
-# Expose the port your app runs on
+# Build JAR
+RUN mvn clean package -DskipTests
+
+# === Stage 2: Run the app ===
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# Copy JAR from the previous stage
+COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
+
+# Expose port
 EXPOSE 2424
 
-# Start the application
+# Start app
 ENTRYPOINT ["java", "-jar", "app.jar"]
