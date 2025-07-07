@@ -37,67 +37,65 @@ const ProfilePage = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+const handlePayNow = async (orderItem) => {
+  try {
+    console.log("Initiating payment for order ID:", orderItem.id);
 
-  const handlePayNow = async (orderItem) => {
-    
-    try {
-      console.log("Initiating payment for order ID:", orderItem.id);
+    const res = await axios.post(
+      `${ApiService.BASE_URL}/payment/create-order?amount=${orderItem.price}`,
+      {},
+      { headers: ApiService.getHeader() }
+    );
 
-      const res = await axios.post(
-        `http://localhost:2424/payment/create-order?amount=${orderItem.price}`,
-        {},
-        { headers: ApiService.getHeader() }
-      );
+    const { orderId, amount, currency, key } = res.data;
 
-      const { orderId, amount, currency, key } = res.data;
+    const options = {
+      key,
+      amount,
+      currency,
+      order_id: orderId,
+      name: "GUVI Shop",
+      description: "Product Purchase",
+      handler: async function (response) {
+        console.log("Razorpay payment response:", response);
+        try {
+          await axios.post(
+            `${ApiService.BASE_URL}/payment/verify`,
+            {
+              orderId: orderItem.id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            },
+            {
+              headers: ApiService.getHeader(),
+            }
+          );
 
-      const options = {
-        key,
-        amount,
-        currency,
-        order_id: orderId,
-        name: "GUVI Shop",
-        description: "Product Purchase",
-        handler: async function (response) {
-             console.log("Razorpay payment response:", response);
-          try {
-            await axios.post(
-              "http://localhost:2424/payment/verify",
-              {
-                orderId: orderItem.id,
-                razorpayOrderId: response.razorpay_order_id,
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpaySignature: response.razorpay_signature,
-              },
-              {
-                headers: ApiService.getHeader(),
-              }
-            );
+          alert("✅ Payment Success!");
+          fetchUserInfo();
+        } catch (err) {
+          console.error("❌ Payment verification failed:", err);
+          alert("❌ Payment verification failed.");
+        }
+      },
+      prefill: {
+        name: userInfo.name,
+        email: userInfo.email,
+        contact: userInfo.phoneNumber,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
 
-            alert("✅ Payment Success!");
-            fetchUserInfo();
-          } catch (err) {
-            console.error("❌ Payment verification failed:", err);
-            alert("❌ Payment verification failed.");
-          }
-        },
-        prefill: {
-          name: userInfo.name,
-          email: userInfo.email,
-          contact: userInfo.phoneNumber,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (error) {
-      console.error("❌ Payment failed:", error);
-      alert("❌ Payment failed. Try again.");
-    }
-  };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  } catch (error) {
+    console.error("❌ Payment failed:", error);
+    alert("❌ Payment failed. Try again.");
+  }
+};
 
   if (!userInfo) {
     return <div>Loading...</div>;
