@@ -1,102 +1,112 @@
-import React, {useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
-import  useCart  from "../context/usecart";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ApiService from "../../service/ApiService";
-
+import { CartContext } from "../context/CartContext";
 
 const ProductDetailsPage = () => {
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
-    const {productId} = useParams();
-    const {cart, dispatch} = useCart();
-    const [product, setProduct] = useState(null);
-
-    useEffect(()=>{
-        fetchProduct();
-    }, [productId])
-
+  useEffect(() => {
     const fetchProduct = async () => {
-        try {
-            const response = await ApiService.getProductById(productId);
-            setProduct(response.product);
-            
-        } catch (error) {
-            console.log(error.message || error)
-        }
+      const data = await ApiService.getProductById(productId);
+      setProduct(data.product);
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    setAddedToCart(true); // Show "View Cart" button
+  };
+
+  const handleBuyNow = async () => {
+    try {
+      const res = await ApiService.createRazorpayOrder(product.price);
+      const { orderId, amount, currency, key } = res;
+
+      const options = {
+        key,
+        amount,
+        currency,
+        order_id: orderId,
+        name: "ABI Mart",
+        description: product.name,
+        handler: async function (response) {
+          try {
+            await ApiService.verifyRazorpayPayment({
+              orderId: product.id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            });
+            alert("✅ Payment Successful");
+          } catch (err) {
+            alert("❌ Payment verification failed");
+          }
+        },
+        prefill: {
+          name: "User",
+          email: "user@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment error:", err);
+      alert("❌ Payment Failed");
     }
+  };
 
-    
-    const addToCart = () => {
-        if (product) {
-            dispatch({type: 'ADD_ITEM', payload: product});   
-        }
-    }
+  if (!product) return <div>Loading...</div>;
 
-    const incrementItem = () => {
-        if(product){
-            dispatch({type: 'INCREMENT_ITEM', payload: product});
- 
-        }
-    }
+  return (
+    <div className="p-6 max-w-4xl mx-auto mt-10 bg-white shadow rounded">
+      <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+      <img
+        src={product.imageUrl}
+        alt={product.name}
+        className="w-full max-w-sm mb-4"
+      />
+      <p className="mb-2 text-lg">₹{product.price}</p>
+      <p className="mb-6">{product.description}</p>
 
-    const decrementItem = () => {
-        if (product) {
-            const cartItem = cart.find(item => item.id === product.id);
-            if (cartItem && cartItem.quantity > 1) {
-                dispatch({type: 'DECREMENT_ITEM', payload: product}); 
-            }else{
-                dispatch({type: 'REMOVE_ITEM', payload: product}); 
-            }
-            
-        }
-    }
-
-    if (!product) {
-        return <p>Loading product details ...</p>
-    }
-
-    const cartItem = cart.find(item => item.id === product.id);
-
-return (
-  <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
-    <img
-      src={product?.imageUrl}
-      alt={product?.name}
-      className="w-full h-48 object-contain rounded-md mb-6"
-    />
-    <h1 className="text-3xl font-semibold mb-2">{product?.name}</h1>
-    <p className="text-gray-700 mb-4">{product?.description}</p>
-    <span className="text-xl font-bold text-green-600 block mb-6">
-      ₹{product?.price.toFixed(2)}
-    </span>
-
-    {cartItem ? (
-      <div className="flex items-center gap-4">
+      <div className="flex gap-4">
         <button
-          onClick={decrementItem}
-          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          onClick={handleAddToCart}
         >
-          -
+          Add to Cart
         </button>
-        <span className="font-medium text-lg">{cartItem.quantity}</span>
+
         <button
-          onClick={incrementItem}
-          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={handleBuyNow}
         >
-          +
+          Buy Now
         </button>
+
+        {addedToCart && (
+          <button
+            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900"
+            onClick={() => navigate("/cart")}
+          >
+            View Cart
+          </button>
+        )}
       </div>
-    ) : (
-      <button
-        onClick={addToCart}
-        className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Add To Cart
-      </button>
-    )}
-  </div>
-);
-
-
-}
+    </div>
+  );
+};
 
 export default ProductDetailsPage;
