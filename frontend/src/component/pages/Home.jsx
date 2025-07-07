@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import ProductList from "../common/ProductList";
 import Pagination from "../common/Pagination";
 import ApiService from "../../service/ApiService";
+import Banner from "../common/Banner";
+
 
 
 const Home = () => {
@@ -44,6 +46,8 @@ const Home = () => {
 
 
    return (
+      <div className="p-4">
+    <Banner />
   <div className="min-h-screen bg-white p-6">
     {error ? (
       <p className="text-center text-red-600 font-medium">{error}</p>
@@ -57,6 +61,7 @@ const Home = () => {
         />
       </div>
     )}
+  </div>
   </div>
 );
 
