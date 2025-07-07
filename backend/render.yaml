@@ -7,11 +7,12 @@ services:
     autoDeploy: true
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://<your-cloud-db>:3306/ecommerce
+        value: jdbc:postgresql://dpg-d1lumph5pdvs73cg2eo0-a.oregon-postgres.render.com:5432/ecommerce_jzrg
       - key: SPRING_DATASOURCE_USERNAME
-        value: your-username
+        value: abishek
       - key: SPRING_DATASOURCE_PASSWORD
-        value: your-password
+        value: wXbFSNc8F8wNhei5YTFScawRRKme0zU1
+
       - key: CLOUDINARY_CLOUD_NAME
         value: dc37qrn1x
       - key: CLOUDINARY_API_KEY

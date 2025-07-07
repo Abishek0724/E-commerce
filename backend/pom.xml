@@ -110,7 +110,10 @@
     <artifactId>razorpay-java</artifactId>
     <version>1.4.3</version> 
 </dependency>
-
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
 
 
 	</dependencies>
