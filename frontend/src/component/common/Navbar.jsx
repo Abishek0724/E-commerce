@@ -64,7 +64,11 @@ const Navbar = () =>{
       {/* Navigation Links */}
       <div className="flex flex-wrap gap-4 text-sm md:text-base items-center">
         <NavLink to="/" className="hover:text-blue-600 transition">Home</NavLink>
-        <NavLink to="/categories" className="hover:text-blue-600 transition">Categories</NavLink>
+       {isAdmin && (
+  <NavLink to="/categories" className="hover:text-blue-600 transition">
+    Categories
+  </NavLink>
+)}
         {isAuthenticated && (
           <NavLink to="/profile" className="hover:text-blue-600 transition">My Account</NavLink>
         )}
