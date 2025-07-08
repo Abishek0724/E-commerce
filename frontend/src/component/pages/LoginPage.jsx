@@ -24,11 +24,9 @@ const LoginPage = () => {
             if (response.status === 200) {
                 setMessage("User Successfully Logged in");
 
-                // Store token and role in localStorage
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('role', response.role);
 
-                // Redirect based on role
                 setTimeout(() => {
                     if (response.role === "ROLE_ADMIN") {
                         navigate("/admin");

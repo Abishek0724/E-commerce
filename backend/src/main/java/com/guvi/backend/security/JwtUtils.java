@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUtils {
 
-    private static final long EXPIRATION_TIME = 1000L * 60L * 60L * 24L * 30L * 6L; // 6 months
+    private static final long EXPIRATION_TIME = 1000L * 60L * 60L * 24L * 30L * 6L;
     private SecretKey key;
 
     @Value("${secreteJwtString}")
@@ -50,7 +50,7 @@ public class JwtUtils {
 
     public List<String> extractRoles(String token) {
         Claims claims = extractAllClaims(token);
-        return claims.get("authorities", List.class); // ✅ extract authorities
+        return claims.get("authorities", List.class);
     }
 
     private Claims extractAllClaims(String token) {

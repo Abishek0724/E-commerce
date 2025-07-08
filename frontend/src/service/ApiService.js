@@ -48,8 +48,7 @@ export default class ApiService {
         const response = await axios.post(`${this.BASE_URL}/product/create`, formData, {
             headers: {
                 Authorization: `Bearer ${this.getToken()}`
-                // Don't add 'Content-Type' here; axios handles it for multipart
-            }
+                 }
         });
         return response.data;
     }

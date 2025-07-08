@@ -22,7 +22,7 @@ const ProductDetailsPage = () => {
 
   const handleAddToCart = () => {
     addToCart(product);
-    setAddedToCart(true); // Show "View Cart" button
+    setAddedToCart(true); 
   };
 
   const handleBuyNow = async () => {
@@ -45,9 +45,9 @@ const ProductDetailsPage = () => {
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
             });
-            alert("✅ Payment Successful");
+            alert("Payment Successful");
           } catch (err) {
-            alert("❌ Payment verification failed");
+            alert(" Payment verification failed");
           }
         },
         prefill: {
@@ -64,7 +64,7 @@ const ProductDetailsPage = () => {
       rzp.open();
     } catch (err) {
       console.error("Payment error:", err);
-      alert("❌ Payment Failed");
+      alert("Payment Failed");
     }
   };
 

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response registerUser(UserDto registrationRequest) {
-        // Default role
+
         UserRole role = UserRole.ROLE_USER;
 
         try {
@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
 
-        // Save user
         User user = User.builder()
                 .name(registrationRequest.getName())
                 .email(registrationRequest.getEmail())

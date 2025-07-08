@@ -8,7 +8,7 @@ const AddressPage = () => {
         street: '',
         city: '',
         state: '',
-        zipcode: '',  // ✅ fixed casing here
+        zipcode: '',  
         country: ''
     });
 
@@ -26,12 +26,12 @@ const AddressPage = () => {
         try {
             const response = await ApiService.getLoggedInUserInfo();
             if (response.user.address) {
-                // ✅ Normalize the address keys
+                
                 setAddress({
                     street: response.user.address.street || '',
                     city: response.user.address.city || '',
                     state: response.user.address.state || '',
-                    zipcode: response.user.address.zipcode || '', // ✅ use lowercase key
+                    zipcode: response.user.address.zipcode || '', 
                     country: response.user.address.country || ''
                 });
             }

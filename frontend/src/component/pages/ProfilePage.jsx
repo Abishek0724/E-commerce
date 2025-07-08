@@ -72,11 +72,11 @@ const handlePayNow = async (orderItem) => {
             }
           );
 
-          alert("✅ Payment Success!");
+          alert("Payment Success!");
           fetchUserInfo();
         } catch (err) {
-          console.error("❌ Payment verification failed:", err);
-          alert("❌ Payment verification failed.");
+          console.error("Payment verification failed:", err);
+          alert("Payment verification failed.");
         }
       },
       prefill: {
@@ -92,8 +92,8 @@ const handlePayNow = async (orderItem) => {
     const rzp = new window.Razorpay(options);
     rzp.open();
   } catch (error) {
-    console.error("❌ Payment failed:", error);
-    alert("❌ Payment failed. Try again.");
+    console.error("Payment failed:", error);
+    alert(" Payment failed. Try again.");
   }
 };
 

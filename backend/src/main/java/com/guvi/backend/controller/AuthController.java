@@ -28,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/register-admin")
     public ResponseEntity<Response> registerAdmin(@RequestBody UserDto registrationRequest) {
-        registrationRequest.setRole("ROLE_ADMIN"); // 👈 Set role as ADMIN explicitly
+        registrationRequest.setRole("ROLE_ADMIN"); 
         return ResponseEntity.ok(userService.registerUser(registrationRequest));
     }
 

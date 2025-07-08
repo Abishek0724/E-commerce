@@ -32,7 +32,6 @@ public class PaymentController {
     private final OrderItemService orderItemService;
     private final RazorpayConfig razorpayConfig;
 
-    // ✅ 1. Razorpay Order Creation API
     @PostMapping("/create-order")
     public ResponseEntity<?> createOrder(@RequestParam double amount) {
         try {
@@ -56,12 +55,11 @@ public class PaymentController {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace(); // LOG TO CONSOLE
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Razorpay order creation failed: " + e.getMessage());
         }
     }
 
-    // ✅ 2. Razorpay Payment Verification API
     @PostMapping("/verify")
     public ResponseEntity<Response> verifyPayment(@RequestBody PaymentVerificationRequest request) throws Exception {
         String secret = razorpayConfig.getSecret();
@@ -69,7 +67,6 @@ public class PaymentController {
         String data = request.getRazorpayOrderId() + "|" + request.getRazorpayPaymentId();
         String generatedSignature = hmacSHA256(data, secret);
 
-        // ✅ Correct usage of variable: request
         System.out.println("Order ID: " + request.getOrderId());
         System.out.println("Razorpay Order ID: " + request.getRazorpayOrderId());
         System.out.println("Payment ID: " + request.getRazorpayPaymentId());
@@ -91,7 +88,6 @@ public class PaymentController {
         mac.init(secretKey);
         byte[] hash = mac.doFinal(data.getBytes("UTF-8"));
 
-        // Convert the hash to hex (Razorpay expects hex signature)
         StringBuilder hexString = new StringBuilder();
         for (byte b : hash) {
             String hex = Integer.toHexString(0xff & b);

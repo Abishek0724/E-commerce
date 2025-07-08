@@ -7,5 +7,5 @@ public class PaymentVerificationRequest {
     private String razorpayOrderId;
     private String razorpayPaymentId;
     private String razorpaySignature;
-    private Long orderId; // internal Order ID from your DB
+    private Long orderId;
 }

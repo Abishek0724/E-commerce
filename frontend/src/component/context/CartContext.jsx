@@ -1,16 +1,14 @@
-// src/context/CartContext.jsx
+
 import React, { createContext, useReducer, useEffect } from "react";
 
-// Create the CartContext
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext();
 
-// Initial state for the cart
+
 const initialState = {
   cart: JSON.parse(localStorage.getItem("cart")) || [],
 };
 
-// Reducer to handle cart actions
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_ITEM": {
@@ -65,7 +63,6 @@ const cartReducer = (state, action) => {
   }
 };
 
-// CartProvider component
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 

@@ -31,12 +31,8 @@ function App() {
   return (
     <BrowserRouter>
       <CartProvider>
-        {/* Full-page layout wrapper */}
         <div className="min-h-screen flex flex-col">
-          {/* Navbar */}
-          <Navbar />
-
-          {/* Main content area */}
+         <Navbar />      
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -49,8 +45,6 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
               <Route path="/add-address" element={<ProtectedRoute element={<AddressPage />} />} />
               <Route path="/edit-address" element={<ProtectedRoute element={<AddressPage />} />} />
-
-              {/* Admin Routes */}
               <Route path="/admin" element={<AdminRoute element={<AdminPage />} />} />
               <Route path="/admin/categories" element={<AdminRoute element={<AdminCategoryPage />} />} />
               <Route path="/admin/add-category" element={<AdminRoute element={<AddCategory />} />} />
@@ -61,9 +55,7 @@ function App() {
               <Route path="/admin/orders" element={<AdminRoute element={<AdminOrdersPage />} />} />
               <Route path="/admin/order-details/:itemId" element={<AdminRoute element={<AdminOrderDetailsPage />} />} />
             </Routes>
-          </main>
-
-          {/* Footer */}
+          </main>      
           <Footer />
         </div>
       </CartProvider>

@@ -56,8 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (token != null) {
             try {
                 String username = jwtUtils.getUsernameFromToken(token);
-                List<String> roles = jwtUtils.extractRoles(token); // ✅ get authorities
-
+                List<String> roles = jwtUtils.extractRoles(token);
                 if (StringUtils.hasText(username) &&
                         SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -73,11 +72,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(auth);
 
-                        log.info("✅ Authenticated {}, roles: {}", username, roles);
+                        log.info(" Authenticated {}, roles: {}", username, roles);
                     }
                 }
             } catch (Exception e) {
-                log.error("❌ JWT Error: {}", e.getMessage());
+                log.error("JWT Error: {}", e.getMessage());
             }
         }
 

@@ -22,7 +22,7 @@ public class Review {
 
     private Long id;
     private String content;
-    private int rating; // assuming it is in 1 to 10
+    private int rating;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

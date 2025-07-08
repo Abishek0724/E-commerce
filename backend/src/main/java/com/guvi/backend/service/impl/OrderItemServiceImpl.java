@@ -122,7 +122,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
                 order.getOrderItemList().forEach(item -> {
-                        item.setStatus(OrderStatus.CONFIRMED); // or PAID if added to enum
+                        item.setStatus(OrderStatus.CONFIRMED);
                         orderItemRepo.save(item);
                 });
 

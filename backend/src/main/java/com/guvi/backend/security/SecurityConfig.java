@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true) // Enables @PreAuthorize
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -30,14 +30,13 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/category/get-all", "/category/get-category-by-id/**").permitAll()
                         .requestMatchers("/product/get-all", "/product/search", "/product/get-by-category-id/**",
                                 "/product/get-by-product-id/**")
                         .permitAll()
 
-                        // Admin-only endpoints
                         .requestMatchers("/category/create", "/category/update/**", "/category/delete/**")
                         .hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/product/create", "/product/update", "/product/delete/**")
@@ -45,10 +44,8 @@ public class SecurityConfig {
                         .requestMatchers("/order/filter", "/order/update-item-status/**")
                         .hasAuthority("ROLE_ADMIN")
 
-                        // Authenticated user endpoints
                         .requestMatchers("/user/**", "/order/create", "/address/**").authenticated()
 
-                        // Catch-all
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
